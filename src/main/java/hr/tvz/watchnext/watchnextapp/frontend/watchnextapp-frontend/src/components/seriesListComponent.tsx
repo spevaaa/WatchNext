@@ -13,8 +13,7 @@ export const SeriesListComponent = ({ seriesList, onSelectSeries }: SeriesListPr
                 width: '100%', 
                 borderCollapse: 'collapse', 
                 boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-                borderRadius: '8px',
-                overflow: 'hidden'
+                borderRadius: '8px'
             }}>
                 <thead>
                     <tr style={{ backgroundColor: '#007bff', borderBottom: '2px solid #ddd' }}>
