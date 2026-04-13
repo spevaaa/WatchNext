@@ -1,4 +1,6 @@
 import { type Series } from '../types/series';
+import { SeriesReviewComponent } from './SeriesReviewComponent';
+import { mockReview } from '../data/mockReview';
 
 interface SeriesDetailProps {
     selectedSeriesId: string | null;
@@ -12,12 +14,14 @@ export const SeriesDetailComponent = ({ selectedSeriesId, seriesList }: SeriesDe
         return null; 
     }
 
+    const filteredReviews = mockReview.filter(r => r.seriesTitle === selectedSeries.title);
+
     return (
         <div style={{ 
             marginTop: '30px', 
             borderRadius: '8px', 
             overflow: 'hidden', 
-            boxShadow: '0 4px 15px rgba(0,0,0,0.1)', // Malo jača sjena da iskoči
+            boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
             backgroundColor: 'white',
             border: '1px solid #ddd'
         }}>
@@ -36,9 +40,11 @@ export const SeriesDetailComponent = ({ selectedSeriesId, seriesList }: SeriesDe
                     <strong>Žanr:</strong> 
                     <span style={badgeStyle}>{selectedSeries.genre}</span>
                 </div>
+                
                 <div style={detailRowStyle}>
                     <strong>Broj sezona:</strong> {selectedSeries.totalSeasons}
                 </div>
+
                 <div style={detailRowStyle}>
                     <strong>Status:</strong> 
                     <span style={{ 
@@ -48,6 +54,7 @@ export const SeriesDetailComponent = ({ selectedSeriesId, seriesList }: SeriesDe
                         {selectedSeries.status}
                     </span>
                 </div>
+
                 <div style={{ ...detailRowStyle, borderBottom: 'none' }}>
                     <strong>Prosječna ocjena:</strong> 
                     <span style={{ fontSize: '1.1rem', color: '#007bff', fontWeight: 'bold' }}>
@@ -55,11 +62,17 @@ export const SeriesDetailComponent = ({ selectedSeriesId, seriesList }: SeriesDe
                     </span>
                 </div>
             </div>
+
+            <div style={{ padding: '20px', borderTop: '1px solid #eee' }}>
+                <SeriesReviewComponent reviews={filteredReviews} />
+            </div>
         </div>
+            
     );
+    
 };
 
-// Pomoćni stilovi za čišći kod
+
 const detailRowStyle: React.CSSProperties = {
     display: 'flex',
     justifyContent: 'space-between',
