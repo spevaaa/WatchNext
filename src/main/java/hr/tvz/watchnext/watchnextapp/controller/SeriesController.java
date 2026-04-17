@@ -4,6 +4,7 @@ import hr.tvz.watchnext.watchnextapp.command.SeriesActorCommand;
 import hr.tvz.watchnext.watchnextapp.command.SeriesBasicCommand;
 import hr.tvz.watchnext.watchnextapp.command.SeriesCommand;
 import hr.tvz.watchnext.watchnextapp.command.SeriesRatingCommand;
+import hr.tvz.watchnext.watchnextapp.model.Series;
 import hr.tvz.watchnext.watchnextapp.model.SeriesDTO;
 import hr.tvz.watchnext.watchnextapp.service.SeriesService;
 import jakarta.validation.Valid;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/series")
+@CrossOrigin(origins = "http://localhost:5173/")
 public class SeriesController {
 
     private final SeriesService seriesService;
@@ -33,7 +35,7 @@ public class SeriesController {
         return seriesService.getSeriesById(id);
     }
 
-    @GetMapping("/title/{title}")
+    @GetMapping("/{title}")
     public ResponseEntity<SeriesDTO> getByTitle(@PathVariable String title) {
         return seriesService.findByTitle(title)
                 .map(ResponseEntity::ok)
@@ -47,13 +49,14 @@ public class SeriesController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/id/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         seriesService.deleteSeries(id);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{title}")
+    @DeleteMapping("/title/{title}")
+    @CrossOrigin(origins = "http://localhost:5173")
     public ResponseEntity<Void> delete(@PathVariable String title) {
         boolean deleted = seriesService.delete(title);
 
@@ -96,5 +99,11 @@ public class SeriesController {
         return ResponseEntity.notFound().build();
     }
 
+    @PutMapping("/title/{title}")
+    public ResponseEntity<SeriesDTO> update(@PathVariable String title, @RequestBody Series updatedSeries) {
+        return seriesService.update(title, updatedSeries)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
 }

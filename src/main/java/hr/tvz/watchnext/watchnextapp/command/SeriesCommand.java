@@ -18,18 +18,18 @@ public class SeriesCommand {
     private String genre;
 
     @Positive(message = "Broj sezona mora biti pozitivan broj")
-    private int totalSeasons;
+    private Integer totalSeasons;
 
     @NotNull(message = "Status mora biti odabran")
     private SeriesStatus status;
 
     @DecimalMin(value = "0.0", message = "IMDb ocjena ne može biti manja od 0.0")
     @DecimalMax(value = "10.0", message = "IMDb ocjena ne može biti veća od 10.0")
-    private double imdbRating;
+    private Double imdbRating;
 
     @Pattern(regexp = "^S[0-9]{3}$", message = "Šifra mora početi slovom S i sadržavati 3 znamenke (npr. S001)")
     private String internalCode;
 
     @PositiveOrZero(message = "Broj nagrada ne može biti negativan")
-    private int awardCount;
+    private Integer awardCount;
 }
