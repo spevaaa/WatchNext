@@ -17,7 +17,7 @@ public class Series {
     private String genre;
     private int totalSeasons;
     private SeriesStatus status;
-    private double imdbRating;
+    private Double imdbRating;
     private String imdbId;
     private List<String> actors;
 

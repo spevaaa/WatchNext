@@ -1,13 +1,15 @@
 import { type Series } from '../types/series';
-
-interface SeriesListProps {
+import { useNavigate } from 'react-router-dom';
+    
+interface Props {
     seriesList: Series[];
-    onSelectSeries: (title: string) => void;
+    onDelete: (title: string) => void;
 }
 
-export const SeriesListComponent = ({ seriesList, onSelectSeries }: SeriesListProps) => {
+export const SeriesListComponent = ({ seriesList, onDelete }: Props) => {
+    const navigate = useNavigate();
     return (
-        <div className="series-list-container" style={{ padding: '20px' }}>
+        <div className="series-list-container" style={{ width: '100%', padding: '20px' }}>
             <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Popis serija</h2>
             <table style={{ 
                 width: '100%', 
@@ -32,19 +34,31 @@ export const SeriesListComponent = ({ seriesList, onSelectSeries }: SeriesListPr
                                 {series.totalSeasons}
                             </td>
                             <td style={{ padding: '12px', textAlign: 'center' }}>
-                                <button 
-                                    onClick={() => onSelectSeries(series.title)}
-                                    style={{
+                                
+                            <button
+                                onClick={() => navigate(`/details/${series.title}`)}
+                                style={{
                                         padding: '6px 12px',
                                         cursor: 'pointer',
                                         backgroundColor: '#007bff',
                                         color: 'white',
                                         border: 'none',
                                         borderRadius: '4px'
-                                    }}
-                                >
-                                    Detalji
-                                </button>
+                                }}>Detalji</button>
+                                <button 
+                                onClick={() => onDelete(series.title)}
+                                style={{
+                                        padding: '6px 12px',
+                                        marginLeft: '10px',
+                                        cursor: 'pointer',
+                                        backgroundColor: '#ff0000',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '4px'
+                                }}
+                            >
+                                Obriši
+                            </button>
                             </td>
                         </tr>
                     ))}

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Repository
 public class MockSeriesRepository implements SeriesRepository {
@@ -52,7 +51,7 @@ public class MockSeriesRepository implements SeriesRepository {
     public List<Series> findByTitle(String val) {
         return seriesList.stream()
                 .filter(s -> s.getTitle().toLowerCase().contains(val.toLowerCase()))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public void deleteById(Long id) {
@@ -61,8 +60,12 @@ public class MockSeriesRepository implements SeriesRepository {
 
     @Override
     public Series save(Series series) {
-        if (series.getId() != null) {
-            deleteById(series.getId());
+        if (series.getId() == null) {
+            Long nextId = seriesList.stream()
+                    .mapToLong(Series::getId)
+                    .max()
+                    .orElse(0L) + 1;
+            series.setId(nextId);
         }
         seriesList.add(series);
         return series;
@@ -70,7 +73,8 @@ public class MockSeriesRepository implements SeriesRepository {
 
     @Override
     public void deleteByTitle(String title) {
-        seriesList.removeIf(s -> s.getTitle().equalsIgnoreCase(title));
+        if (title == null) return;
+        seriesList.removeIf(s -> s.getTitle() != null && s.getTitle().equalsIgnoreCase(title));
     }
 
 

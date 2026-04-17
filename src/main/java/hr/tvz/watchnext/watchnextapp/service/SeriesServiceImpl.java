@@ -28,7 +28,7 @@ public class SeriesServiceImpl implements SeriesService {
     public List<SeriesDTO> getAllSeries() {
         return seriesRepository.findAll().stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -42,7 +42,7 @@ public class SeriesServiceImpl implements SeriesService {
     public List<SeriesDTO> searchByTitle(String title) {
         return seriesRepository.findByTitle(title).stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -68,6 +68,7 @@ public class SeriesServiceImpl implements SeriesService {
 
         Series newSeries = Series.builder()
                 .id((long) (seriesRepository.findAll().size() + 1))
+                .title(command.getTitle())
                 .genre(command.getGenre())
                 .totalSeasons(command.getTotalSeasons())
                 .status(command.getStatus())
