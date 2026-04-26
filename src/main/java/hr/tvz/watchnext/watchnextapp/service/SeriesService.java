@@ -4,6 +4,7 @@ import hr.tvz.watchnext.watchnextapp.command.SeriesActorCommand;
 import hr.tvz.watchnext.watchnextapp.command.SeriesBasicCommand;
 import hr.tvz.watchnext.watchnextapp.command.SeriesCommand;
 import hr.tvz.watchnext.watchnextapp.command.SeriesRatingCommand;
+import hr.tvz.watchnext.watchnextapp.model.Series;
 import hr.tvz.watchnext.watchnextapp.model.SeriesDTO;
 
 import java.util.List;
@@ -22,5 +23,6 @@ public interface SeriesService {
     Optional<SeriesDTO> saveBasic(SeriesBasicCommand command);
     boolean addActor(SeriesActorCommand command);
     public Optional<SeriesDTO> updateImdbRating(SeriesRatingCommand command);
+    public Optional<SeriesDTO> update(String title, Series updatedSeries);
 
 }

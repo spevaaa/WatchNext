@@ -4,6 +4,7 @@ import hr.tvz.watchnext.watchnextapp.command.SeriesActorCommand;
 import hr.tvz.watchnext.watchnextapp.command.SeriesBasicCommand;
 import hr.tvz.watchnext.watchnextapp.command.SeriesCommand;
 import hr.tvz.watchnext.watchnextapp.command.SeriesRatingCommand;
+import hr.tvz.watchnext.watchnextapp.model.Series;
 import hr.tvz.watchnext.watchnextapp.model.SeriesDTO;
 import hr.tvz.watchnext.watchnextapp.service.SeriesService;
 import jakarta.validation.Valid;
@@ -98,5 +99,11 @@ public class SeriesController {
         return ResponseEntity.notFound().build();
     }
 
+    @PutMapping("/title/{title}")
+    public ResponseEntity<SeriesDTO> update(@PathVariable String title, @RequestBody Series updatedSeries) {
+        return seriesService.update(title, updatedSeries)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
 }

@@ -60,14 +60,19 @@ public class MockSeriesRepository implements SeriesRepository {
 
     @Override
     public Series save(Series series) {
-        if (series.getId() == null) {
+        if (series.getId() != null) {
+            boolean exists = seriesList.stream().anyMatch(s -> s.getId().equals(series.getId()));
+            if (exists) deleteById(series.getId());
+
+            seriesList.add(series);
+        } else {
             Long nextId = seriesList.stream()
-                    .mapToLong(Series::getId)
+                    .mapToLong(s -> s.getId() != null ? s.getId() : 0L)
                     .max()
                     .orElse(0L) + 1;
             series.setId(nextId);
+            seriesList.add(series);
         }
-        seriesList.add(series);
         return series;
     }
 

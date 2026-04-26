@@ -4,9 +4,10 @@ import { useNavigate } from 'react-router-dom';
 interface Props {
     seriesList: Series[];
     onDelete: (title: string) => void;
+    onUpdate: (series: Series) => void;
 }
 
-export const SeriesListComponent = ({ seriesList, onDelete }: Props) => {
+export const SeriesListComponent = ({ seriesList, onDelete, onUpdate }: Props) => {
     const navigate = useNavigate();
     return (
         <div className="series-list-container" style={{ width: '100%', padding: '20px' }}>
@@ -58,6 +59,20 @@ export const SeriesListComponent = ({ seriesList, onDelete }: Props) => {
                                 }}
                             >
                                 Obriši
+                            </button>
+                            <button 
+                                onClick={() => onUpdate(series)}
+                                style={{
+                                        padding: '6px 12px',
+                                        marginLeft: '10px',
+                                        cursor: 'pointer',
+                                        backgroundColor: '#018921',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '4px'
+                                }}
+                            >
+                                Uredi
                             </button>
                             </td>
                         </tr>

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class SeriesServiceImpl implements SeriesService {
@@ -173,5 +172,29 @@ public class SeriesServiceImpl implements SeriesService {
             series.setStatus(SeriesStatus.valueOf(dto.getStatus().toUpperCase()));
         }
         return series;
+    }
+
+    @Override
+    public Optional<SeriesDTO> update(String title, Series updatedSeries) {
+        List<Series> existingSeriesList = seriesRepository.findByTitle(title);
+
+        if (existingSeriesList.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Series seriesToUpdate = existingSeriesList.get(0);
+        Long currentId = seriesToUpdate.getId();
+
+        seriesToUpdate.setTitle(updatedSeries.getTitle());
+        seriesToUpdate.setGenre(updatedSeries.getGenre());
+        seriesToUpdate.setTotalSeasons(updatedSeries.getTotalSeasons());
+        seriesToUpdate.setStatus(updatedSeries.getStatus());
+        seriesToUpdate.setImdbRating(updatedSeries.getImdbRating());
+        seriesToUpdate.setImdbId(updatedSeries.getImdbId());
+
+        seriesToUpdate.setId(currentId);
+        Series saved = seriesRepository.save(seriesToUpdate);
+
+        return Optional.of(convertToDTO(saved));
     }
 }
