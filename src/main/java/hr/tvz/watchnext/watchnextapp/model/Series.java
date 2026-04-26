@@ -3,8 +3,6 @@ package hr.tvz.watchnext.watchnextapp.model;
 import hr.tvz.watchnext.watchnextapp.enumeration.SeriesStatus;
 import lombok.*;
 
-import java.util.List;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -19,6 +17,5 @@ public class Series {
     private SeriesStatus status;
     private Double imdbRating;
     private String imdbId;
-    private List<String> actors;
 
 }

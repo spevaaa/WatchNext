@@ -1,9 +1,6 @@
 package hr.tvz.watchnext.watchnextapp.controller;
 
-import hr.tvz.watchnext.watchnextapp.command.SeriesActorCommand;
-import hr.tvz.watchnext.watchnextapp.command.SeriesBasicCommand;
 import hr.tvz.watchnext.watchnextapp.command.SeriesCommand;
-import hr.tvz.watchnext.watchnextapp.command.SeriesRatingCommand;
 import hr.tvz.watchnext.watchnextapp.model.Series;
 import hr.tvz.watchnext.watchnextapp.model.SeriesDTO;
 import hr.tvz.watchnext.watchnextapp.service.SeriesService;
@@ -73,30 +70,6 @@ public class SeriesController {
         return seriesService.save(command)
                 .map(dto -> ResponseEntity.status(HttpStatus.CREATED).body(dto))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.CONFLICT).build());
-    }
-
-
-    @PostMapping("/basic")
-    public ResponseEntity<SeriesDTO> createBasic(@Valid @RequestBody SeriesBasicCommand command) {
-        return seriesService.saveBasic(command)
-                .map(dto -> ResponseEntity.status(HttpStatus.CREATED).body(dto))
-                .orElse(ResponseEntity.status(HttpStatus.CONFLICT).build());
-    }
-
-    @PostMapping("/rating")
-    public ResponseEntity<SeriesDTO> updateRating(@Valid @RequestBody SeriesRatingCommand command) {
-        return seriesService.updateImdbRating(command)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @PostMapping("/actor")
-    public ResponseEntity<String> addActor(@Valid @RequestBody SeriesActorCommand command) {
-        boolean success = seriesService.addActor(command);
-        if (success) {
-            return ResponseEntity.status(HttpStatus.CREATED).body("Glumac uspješno dodan!");
-        }
-        return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/title/{title}")

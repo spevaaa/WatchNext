@@ -1,16 +1,12 @@
 package hr.tvz.watchnext.watchnextapp.service;
 
-import hr.tvz.watchnext.watchnextapp.command.SeriesActorCommand;
-import hr.tvz.watchnext.watchnextapp.command.SeriesBasicCommand;
 import hr.tvz.watchnext.watchnextapp.command.SeriesCommand;
-import hr.tvz.watchnext.watchnextapp.command.SeriesRatingCommand;
 import hr.tvz.watchnext.watchnextapp.enumeration.SeriesStatus;
 import hr.tvz.watchnext.watchnextapp.model.Series;
 import hr.tvz.watchnext.watchnextapp.model.SeriesDTO;
 import hr.tvz.watchnext.watchnextapp.repository.SeriesRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,17 +62,17 @@ public class SeriesServiceImpl implements SeriesService {
         }
 
         Series newSeries = Series.builder()
-                .id((long) (seriesRepository.findAll().size() + 1))
                 .title(command.getTitle())
                 .genre(command.getGenre())
                 .totalSeasons(command.getTotalSeasons())
                 .status(command.getStatus())
                 .imdbRating(command.getImdbRating())
+                .imdbId(command.getImdbId())
                 .build();
 
-        seriesRepository.save(newSeries);
+        Series saved = seriesRepository.save(newSeries);
 
-        return Optional.of(convertToDTO(newSeries));
+        return Optional.of(convertToDTO(saved));
     }
 
     @Override
@@ -108,58 +104,14 @@ public class SeriesServiceImpl implements SeriesService {
                 .findFirst();
     }
 
-    @Override
-    public Optional<SeriesDTO> updateImdbRating(SeriesRatingCommand command) {
-        return seriesRepository.findAll().stream()
-                .filter(s -> s.getTitle().equalsIgnoreCase(command.getTitle()))
-                .findFirst()
-                .map(series -> {
-                    series.setImdbRating(command.getImdbRating());
-                    return convertToDTO(series);
-                });
-    }
-
-    @Override
-    public Optional<SeriesDTO> saveBasic(SeriesBasicCommand command) {
-        if (seriesRepository.findAll().stream()
-                .anyMatch(s -> s.getTitle().equalsIgnoreCase(command.getTitle()))) {
-            return Optional.empty();
-        }
-
-        Series newSeries = Series.builder()
-                .id((long) (seriesRepository.findAll().size() + 1))
-                .title(command.getTitle())
-                .genre(command.getGenre())
-                .totalSeasons(command.getTotalSeasons())
-                .status(SeriesStatus.PLANNED)
-                .actors(new ArrayList<>())
-                .build();
-
-        seriesRepository.save(newSeries);
-        return Optional.of(convertToDTO(newSeries));
-    }
-
-    @Override
-    public boolean addActor(SeriesActorCommand command) {
-        return seriesRepository.findById(command.getSeriesId())
-                .map(series -> {
-                    if (series.getActors() == null) {
-                        series.setActors(new ArrayList<>());
-                    }
-                    series.getActors().add(command.getName());
-                    return true;
-                })
-                .orElse(false);
-    }
-
-
     private SeriesDTO convertToDTO(Series series) {
         return new SeriesDTO(
                 series.getTitle(),
                 series.getGenre(),
                 series.getTotalSeasons(),
                 series.getStatus().toString(),
-                series.getImdbRating());
+                series.getImdbRating(),
+                series.getImdbId());
     }
 
     private Series convertToEntity(SeriesDTO dto) {
@@ -167,7 +119,7 @@ public class SeriesServiceImpl implements SeriesService {
         series.setTitle(dto.getTitle());
         series.setGenre(dto.getGenre());
         series.setTotalSeasons(dto.getTotalSeasons());
-        series.setImdbRating(dto.getAverageRating());
+        series.setImdbRating(dto.getImdbRating());
         if (dto.getStatus() != null) {
             series.setStatus(SeriesStatus.valueOf(dto.getStatus().toUpperCase()));
         }

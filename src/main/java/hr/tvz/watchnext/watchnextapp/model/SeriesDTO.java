@@ -11,16 +11,17 @@ public class SeriesDTO {
     private String genre;
     private Integer totalSeasons;
     private String status;
-    private Double averageRating;
+    private Double imdbRating;
+    private String imdbId;
 
-    public SeriesDTO() {
-    }
+    public SeriesDTO() {}
 
-    public SeriesDTO(String title, String genre, Integer totalSeasons, String status, Double averageRating) {
+    public SeriesDTO(String title, String genre, Integer totalSeasons, String status, Double imdbRating, String imdbId) {
         this.title = title;
         this.genre = genre;
         this.totalSeasons = totalSeasons;
         this.status = status;
-        this.averageRating = averageRating;
+        this.imdbRating = imdbRating;
+        this.imdbId = imdbId;
     }
 }

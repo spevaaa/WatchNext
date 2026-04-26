@@ -9,19 +9,20 @@ export const SeriesAddComponent = ({ onSeriesAdded }: SeriesAddProps) => {
     const [genre, setGenre] = useState('');
     const [totalSeasons, setTotalSeasons] = useState(1);
     const [status, setStatus] = useState('WATCHING');
+    const [imdbId, setImdbId] = useState('');
+    const [imdbRating, setImdbRating] = useState(0.0);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         const newSeries = { 
-        title: title,
-        genre: genre,
-        totalSeasons: totalSeasons,
-        status: status,
-        imdbRating: 0.0,
-        internalCode: "S" + Math.floor(Math.random() * 1000).toString().padStart(3, '0'),
-        awardCount: 0
-    };
+            title: title,
+            genre: genre,
+            totalSeasons: totalSeasons,
+            status: status,
+            imdbRating: imdbRating,
+            imdbId: imdbId
+        };
 
         try {
             const response = await fetch('http://localhost:8080/api/series', {
@@ -37,6 +38,7 @@ export const SeriesAddComponent = ({ onSeriesAdded }: SeriesAddProps) => {
                 setGenre('');
                 setTotalSeasons(1);
                 setStatus('WATCHING');
+                setImdbId('');
                 
                 onSeriesAdded();
                 alert('Serija uspješno dodana!');
@@ -91,6 +93,27 @@ export const SeriesAddComponent = ({ onSeriesAdded }: SeriesAddProps) => {
                             <option value="PLANNED">PLANNED</option>
                             <option value="COMPLETED">COMPLETED</option>
                         </select>
+                    </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: '15px' }}>
+                    <div style={{ ...inputGroupStyle, flex: 1 }}>
+                        <label style={labelStyle}>IMDB Rating</label>
+                        <input 
+                            type="number" step="0.1" min="0" max="10" 
+                            placeholder="npr. 8.5"
+                            onChange={(e) => setImdbRating(Number(e.target.value))}
+                            style={inputStyle}
+                        />
+                    </div>
+
+                    <div style={{ ...inputGroupStyle, flex: 1 }}>
+                        <label style={labelStyle}>IMDB ID</label>
+                        <input 
+                            type="text" placeholder="npr. tt0903747" value={imdbId} 
+                            onChange={(e) => setImdbId(e.target.value)}
+                            style={inputStyle}
+                        />
                     </div>
                 </div>
 

@@ -3,5 +3,6 @@ export interface Series {
     genre: string;
     totalSeasons: number;
     status: string;
-    averageRating: number;
+    imdbRating: number;
+    imdbId?: string;
 }

@@ -27,9 +27,5 @@ public class SeriesCommand {
     @DecimalMax(value = "10.0", message = "IMDb ocjena ne može biti veća od 10.0")
     private Double imdbRating;
 
-    @Pattern(regexp = "^S[0-9]{3}$", message = "Šifra mora početi slovom S i sadržavati 3 znamenke (npr. S001)")
-    private String internalCode;
-
-    @PositiveOrZero(message = "Broj nagrada ne može biti negativan")
-    private Integer awardCount;
+    private String imdbId;
 }

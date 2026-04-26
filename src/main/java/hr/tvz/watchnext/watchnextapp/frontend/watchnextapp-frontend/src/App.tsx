@@ -54,7 +54,7 @@ function App() {
     };
 
     return (
-        <div style={{ width: '55%', margin: '0 auto' }}>
+        <div style={{ width: '70%', margin: '0 auto' }}>
             <nav style={{ padding: '20px', backgroundColor: '#003363', marginBottom: '20px', borderRadius: '8px', width: '100%' }}>
                 <Link to="/" style={{ color: 'white', marginRight: '20px', textDecoration: 'none' }}>Početna</Link>
                 <Link to="/list" style={{ color: 'white', textDecoration: 'none' }}>Lista serija</Link>
