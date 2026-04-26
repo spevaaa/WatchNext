@@ -73,6 +73,14 @@ public class MockSeriesRepository implements SeriesRepository {
             series.setId(nextId);
             seriesList.add(series);
         }
+        if (series.getId() == null) {
+            Long nextId = seriesList.stream()
+                    .mapToLong(Series::getId)
+                    .max()
+                    .orElse(0L) + 1;
+            series.setId(nextId);
+        }
+        seriesList.add(series);
         return series;
     }
 

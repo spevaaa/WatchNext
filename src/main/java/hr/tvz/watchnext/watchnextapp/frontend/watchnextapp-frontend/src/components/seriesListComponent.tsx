@@ -1,13 +1,16 @@
 import { type Series } from '../types/series';
 import { useNavigate } from 'react-router-dom';
-    
+
 interface Props {
     seriesList: Series[];
     onDelete: (title: string) => void;
     onUpdate: (series: Series) => void;
+    onDelete: (title: string) => void;
 }
 
 export const SeriesListComponent = ({ seriesList, onDelete, onUpdate }: Props) => {
+    const navigate = useNavigate();
+export const SeriesListComponent = ({ seriesList, onDelete }: Props) => {
     const navigate = useNavigate();
     return (
         <div className="series-list-container" style={{ width: '100%', padding: '20px' }}>
@@ -35,7 +38,7 @@ export const SeriesListComponent = ({ seriesList, onDelete, onUpdate }: Props) =
                                 {series.totalSeasons}
                             </td>
                             <td style={{ padding: '12px', textAlign: 'center' }}>
-                                
+
                             <button
                                 onClick={() => navigate(`/details/${series.title}`)}
                                 style={{
@@ -46,7 +49,7 @@ export const SeriesListComponent = ({ seriesList, onDelete, onUpdate }: Props) =
                                         border: 'none',
                                         borderRadius: '4px'
                                 }}>Detalji</button>
-                                <button 
+                                <button
                                 onClick={() => onDelete(series.title)}
                                 style={{
                                         padding: '6px 12px',
@@ -60,7 +63,7 @@ export const SeriesListComponent = ({ seriesList, onDelete, onUpdate }: Props) =
                             >
                                 Obriši
                             </button>
-                            <button 
+                            <button
                                 onClick={() => onUpdate(series)}
                                 style={{
                                         padding: '6px 12px',
@@ -73,6 +76,21 @@ export const SeriesListComponent = ({ seriesList, onDelete, onUpdate }: Props) =
                                 }}
                             >
                                 Uredi
+                            </button>
+                                }}>Detalji</button>
+                                <button
+                                onClick={() => onDelete(series.title)}
+                                style={{
+                                        padding: '6px 12px',
+                                        marginLeft: '10px',
+                                        cursor: 'pointer',
+                                        backgroundColor: '#ff0000',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '4px'
+                                }}
+                            >
+                                Obriši
                             </button>
                             </td>
                         </tr>
