@@ -5,13 +5,11 @@ interface Props {
     seriesList: Series[];
     onDelete: (title: string) => void;
     onUpdate: (series: Series) => void;
-    onDelete: (title: string) => void;
 }
 
 export const SeriesListComponent = ({ seriesList, onDelete, onUpdate }: Props) => {
     const navigate = useNavigate();
-export const SeriesListComponent = ({ seriesList, onDelete }: Props) => {
-    const navigate = useNavigate();
+
     return (
         <div className="series-list-container" style={{ width: '100%', padding: '20px' }}>
             <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Popis serija</h2>
@@ -38,34 +36,23 @@ export const SeriesListComponent = ({ seriesList, onDelete }: Props) => {
                                 {series.totalSeasons}
                             </td>
                             <td style={{ padding: '12px', textAlign: 'center' }}>
-
-                            <button
-                                onClick={() => navigate(`/details/${series.title}`)}
-                                style={{
+                                <button
+                                    onClick={() => navigate(`/details/${series.title}`)}
+                                    style={{
                                         padding: '6px 12px',
                                         cursor: 'pointer',
                                         backgroundColor: '#007bff',
                                         color: 'white',
                                         border: 'none',
                                         borderRadius: '4px'
-                                }}>Detalji</button>
+                                    }}
+                                >
+                                    Detalji
+                                </button>
+                                
                                 <button
-                                onClick={() => onDelete(series.title)}
-                                style={{
-                                        padding: '6px 12px',
-                                        marginLeft: '10px',
-                                        cursor: 'pointer',
-                                        backgroundColor: '#ff0000',
-                                        color: 'white',
-                                        border: 'none',
-                                        borderRadius: '4px'
-                                }}
-                            >
-                                Obriši
-                            </button>
-                            <button
-                                onClick={() => onUpdate(series)}
-                                style={{
+                                    onClick={() => onUpdate(series)}
+                                    style={{
                                         padding: '6px 12px',
                                         marginLeft: '10px',
                                         cursor: 'pointer',
@@ -73,14 +60,14 @@ export const SeriesListComponent = ({ seriesList, onDelete }: Props) => {
                                         color: 'white',
                                         border: 'none',
                                         borderRadius: '4px'
-                                }}
-                            >
-                                Uredi
-                            </button>
-                                }}>Detalji</button>
+                                    }}
+                                >
+                                    Uredi
+                                </button>
+
                                 <button
-                                onClick={() => onDelete(series.title)}
-                                style={{
+                                    onClick={() => onDelete(series.title)}
+                                    style={{
                                         padding: '6px 12px',
                                         marginLeft: '10px',
                                         cursor: 'pointer',
@@ -88,10 +75,10 @@ export const SeriesListComponent = ({ seriesList, onDelete }: Props) => {
                                         color: 'white',
                                         border: 'none',
                                         borderRadius: '4px'
-                                }}
-                            >
-                                Obriši
-                            </button>
+                                    }}
+                                >
+                                    Obriši
+                                </button>
                             </td>
                         </tr>
                     ))}
