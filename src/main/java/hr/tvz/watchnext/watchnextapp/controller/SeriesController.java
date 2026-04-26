@@ -1,6 +1,10 @@
 package hr.tvz.watchnext.watchnextapp.controller;
 
 import hr.tvz.watchnext.watchnextapp.command.SeriesCommand;
+<<<<<<< HEAD
+=======
+import hr.tvz.watchnext.watchnextapp.command.SeriesRatingCommand;
+>>>>>>> a018e0761070cfc270de17c89d024e120a715b1c
 import hr.tvz.watchnext.watchnextapp.model.Series;
 import hr.tvz.watchnext.watchnextapp.model.SeriesDTO;
 import hr.tvz.watchnext.watchnextapp.service.SeriesService;
@@ -79,4 +83,23 @@ public class SeriesController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+<<<<<<< HEAD
+=======
+    @PostMapping("/actor")
+    public ResponseEntity<String> addActor(@Valid @RequestBody SeriesActorCommand command) {
+        boolean success = seriesService.addActor(command);
+        if (success) {
+            return ResponseEntity.status(HttpStatus.CREATED).body("Glumac uspješno dodan!");
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/title/{title}")
+    public ResponseEntity<SeriesDTO> update(@PathVariable String title, @RequestBody Series updatedSeries) {
+        return seriesService.update(title, updatedSeries)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+>>>>>>> a018e0761070cfc270de17c89d024e120a715b1c
 }
