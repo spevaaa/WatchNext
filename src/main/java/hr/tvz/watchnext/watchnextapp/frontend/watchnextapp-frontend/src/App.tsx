@@ -53,6 +53,19 @@ function App() {
         }
     };
 
+    const handleDeleteByStatus = async (status: string) => {
+    try {
+        const response = await fetch(`http://localhost:8080/api/series/status/${status}`, {
+            method: 'DELETE'
+        });
+        if (response.ok) {
+            refreshData();
+        }
+    } catch (err) {
+        console.error("Delete by status failed", err);
+    }
+};
+
     return (
         <div style={{ width: '70%', margin: '0 auto' }}>
             <nav style={{ padding: '20px', backgroundColor: '#003363', marginBottom: '20px', borderRadius: '8px', width: '100%' }}>
@@ -74,6 +87,7 @@ function App() {
                             seriesList={data} 
                             onDelete={handleDelete} 
                             onUpdate={(series) => setEditingSeries(series)} 
+                            onDeleteByStatus={handleDeleteByStatus}
                         />
                         {editingSeries && (
                             <SeriesEditComponent 
@@ -88,7 +102,7 @@ function App() {
                 } />
 
                 <Route path="/details/:id" element={
-                    <SeriesDetailComponent seriesList={data} />
+                    <SeriesDetailComponent seriesList={data} onStatusUpdate={refreshData} />
                 } />
             </Routes>
         </div>

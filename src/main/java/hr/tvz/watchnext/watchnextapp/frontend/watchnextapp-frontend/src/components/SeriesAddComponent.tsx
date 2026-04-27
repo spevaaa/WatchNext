@@ -11,6 +11,8 @@ export const SeriesAddComponent = ({ onSeriesAdded }: SeriesAddProps) => {
     const [status, setStatus] = useState('WATCHING');
     const [imdbId, setImdbId] = useState('');
     const [imdbRating, setImdbRating] = useState(0.0);
+    const [recommendedAdded, setRecommendedAdded] = useState(false);
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -50,6 +52,36 @@ export const SeriesAddComponent = ({ onSeriesAdded }: SeriesAddProps) => {
             console.error("Error adding series:", error);
         }
     };
+
+    const handleListInsert = async () => {
+    const recommendedSeries = [
+        { title: 'The Last of Us', genre: 'Drama', totalSeasons: 2, status: 'PLANNED', imdbRating: 8.8, imdbId: 'tt3581920' },
+        { title: 'Succession', genre: 'Drama', totalSeasons: 4, status: 'PLANNED', imdbRating: 8.9, imdbId: 'tt7660850' },
+        { title: 'The Bear', genre: 'Comedy Drama', totalSeasons: 3, status: 'PLANNED', imdbRating: 8.7, imdbId: 'tt14452776' },
+    ];
+    
+
+    try {
+        const response = await fetch('http://localhost:8080/api/series/list', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(recommendedSeries),
+        });
+
+        
+
+        if (response.ok) {
+            setRecommendedAdded(true);
+            console.log("Recommended series added:", recommendedAdded);
+            onSeriesAdded();
+            alert('Preporučene serije uspješno dodane!');
+        } else {
+            alert('Greška pri dodavanju preporučenih serija.');
+        }
+    } catch (error) {
+        console.error("Error adding recommended series:", error);
+    }
+};
 
    return (
         <div style={containerStyle}>
@@ -120,6 +152,15 @@ export const SeriesAddComponent = ({ onSeriesAdded }: SeriesAddProps) => {
                 <button type="submit" style={buttonStyle}>
                     Spremi u listu
                 </button>
+                {!recommendedAdded && (
+                    <button 
+                    type="button" 
+                    onClick={handleListInsert} 
+                    style={{ ...buttonStyle, backgroundColor: '#007bff' }}
+                >
+                    Dodaj preporučene serije
+                </button>
+)}
             </form>
         </div>
     );

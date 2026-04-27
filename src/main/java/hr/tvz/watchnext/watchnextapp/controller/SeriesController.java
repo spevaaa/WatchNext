@@ -1,10 +1,7 @@
 package hr.tvz.watchnext.watchnextapp.controller;
 
 import hr.tvz.watchnext.watchnextapp.command.SeriesCommand;
-<<<<<<< HEAD
-=======
-import hr.tvz.watchnext.watchnextapp.command.SeriesRatingCommand;
->>>>>>> a018e0761070cfc270de17c89d024e120a715b1c
+import hr.tvz.watchnext.watchnextapp.enumeration.SeriesStatus;
 import hr.tvz.watchnext.watchnextapp.model.Series;
 import hr.tvz.watchnext.watchnextapp.model.SeriesDTO;
 import hr.tvz.watchnext.watchnextapp.service.SeriesService;
@@ -83,23 +80,22 @@ public class SeriesController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-<<<<<<< HEAD
-=======
-    @PostMapping("/actor")
-    public ResponseEntity<String> addActor(@Valid @RequestBody SeriesActorCommand command) {
-        boolean success = seriesService.addActor(command);
-        if (success) {
-            return ResponseEntity.status(HttpStatus.CREATED).body("Glumac uspješno dodan!");
-        }
-        return ResponseEntity.notFound().build();
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<Void> updateStatus(@PathVariable Long id, @RequestParam SeriesStatus status) {
+        seriesService.updateStatus(id, status);
+        return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/title/{title}")
-    public ResponseEntity<SeriesDTO> update(@PathVariable String title, @RequestBody Series updatedSeries) {
-        return seriesService.update(title, updatedSeries)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    @PostMapping("/list")
+    public ResponseEntity<Void> listInsert(@RequestBody List<Series> seriesList) {
+        seriesService.listInsert(seriesList);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
->>>>>>> a018e0761070cfc270de17c89d024e120a715b1c
+    @DeleteMapping("/status/{status}")
+    public ResponseEntity<Void> deleteByStatus(@PathVariable SeriesStatus status) {
+        seriesService.deleteByStatus(status);
+        return ResponseEntity.noContent().build();
+    }
 }

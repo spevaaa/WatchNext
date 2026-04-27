@@ -106,6 +106,7 @@ public class SeriesServiceImpl implements SeriesService {
 
     private SeriesDTO convertToDTO(Series series) {
         return new SeriesDTO(
+                series.getId(),
                 series.getTitle(),
                 series.getGenre(),
                 series.getTotalSeasons(),
@@ -148,5 +149,17 @@ public class SeriesServiceImpl implements SeriesService {
         Series saved = seriesRepository.save(seriesToUpdate);
 
         return Optional.of(convertToDTO(saved));
+    }
+
+    public void listInsert(List<Series> seriesList) {
+        seriesRepository.listInsert(seriesList);
+    }
+
+    public void updateStatus(Long id, SeriesStatus newStatus) {
+        seriesRepository.updateStatus(id, newStatus);
+    }
+
+    public void deleteByStatus(SeriesStatus status) {
+        seriesRepository.deleteByStatus(status);
     }
 }

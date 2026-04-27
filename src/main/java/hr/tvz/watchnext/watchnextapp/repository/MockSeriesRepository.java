@@ -66,17 +66,6 @@ public class MockSeriesRepository implements SeriesRepository {
 
             seriesList.add(series);
         } else {
-<<<<<<< HEAD
-=======
-            Long nextId = seriesList.stream()
-                    .mapToLong(s -> s.getId() != null ? s.getId() : 0L)
-                    .max()
-                    .orElse(0L) + 1;
-            series.setId(nextId);
-            seriesList.add(series);
-        }
-        if (series.getId() == null) {
->>>>>>> a018e0761070cfc270de17c89d024e120a715b1c
             Long nextId = seriesList.stream()
                     .mapToLong(s -> s.getId() != null ? s.getId() : 0L)
                     .max()
@@ -91,6 +80,21 @@ public class MockSeriesRepository implements SeriesRepository {
     public void deleteByTitle(String title) {
         if (title == null) return;
         seriesList.removeIf(s -> s.getTitle() != null && s.getTitle().equalsIgnoreCase(title));
+    }
+
+    @Override
+    public void listInsert(List<Series> seriesList) {
+
+    }
+
+    @Override
+    public void updateStatus(Long id, SeriesStatus newStatus) {
+
+    }
+
+    @Override
+    public void deleteByStatus(SeriesStatus status) {
+
     }
 
 

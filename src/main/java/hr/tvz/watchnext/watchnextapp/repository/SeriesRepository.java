@@ -1,5 +1,6 @@
 package hr.tvz.watchnext.watchnextapp.repository;
 
+import hr.tvz.watchnext.watchnextapp.enumeration.SeriesStatus;
 import hr.tvz.watchnext.watchnextapp.model.Series;
 
 import java.util.List;
@@ -12,4 +13,8 @@ public interface SeriesRepository {
     void deleteById(Long id);
     Series save(Series series);
     void deleteByTitle(String title);
+
+    void listInsert(List<Series> seriesList);
+    void updateStatus(Long id, SeriesStatus newStatus);
+    void deleteByStatus(SeriesStatus status);
 }

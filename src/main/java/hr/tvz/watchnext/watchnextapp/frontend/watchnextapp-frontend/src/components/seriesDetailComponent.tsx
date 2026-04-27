@@ -1,14 +1,18 @@
+import { useState } from 'react';
 import { type Series } from '../types/series';
 import { useNavigate, useParams } from 'react-router-dom';
 
 interface SeriesDetailProps {
     seriesList: Series[];
+    onStatusUpdate: () => void;
 }
 
-export const SeriesDetailComponent = ({ seriesList }: SeriesDetailProps) => {
+export const SeriesDetailComponent = ({ seriesList, onStatusUpdate }: SeriesDetailProps) => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const selectedSeries = seriesList.find(s => s.title === id);
+    const [newStatus, setNewStatus] = useState(selectedSeries?.status ?? 'WATCHING');
+
 
     if (!selectedSeries) {
         return (
@@ -20,6 +24,18 @@ export const SeriesDetailComponent = ({ seriesList }: SeriesDetailProps) => {
             </div>
         );
     }
+
+        const handleStatusUpdate = async () => {
+            const response = await fetch(
+                `http://localhost:8080/api/series/${selectedSeries.id}/status?status=${newStatus}`,
+                { method: 'PATCH' }
+            );
+        if (response.ok) {
+            alert('Status uspješno promijenjen!');
+            onStatusUpdate();
+        }
+};
+
 
     return (
         <div style={{
@@ -88,6 +104,29 @@ export const SeriesDetailComponent = ({ seriesList }: SeriesDetailProps) => {
                     ) : (
                         <span style={{ color: '#aaa' }}>—</span>
                     )}
+                </div>
+                <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <strong>Promijeni status:</strong>
+                    <select
+                        value={newStatus}
+                        onChange={e => setNewStatus(e.target.value)}
+                        style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                    >
+                        <option value="WATCHING">WATCHING</option>
+                        <option value="PLANNED">PLANNED</option>
+                        <option value="COMPLETED">COMPLETED</option>
+                    </select>
+                    <button onClick={handleStatusUpdate} style={{
+                        padding: '8px 16px',
+                        backgroundColor: '#007bff',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                        fontWeight: 'bold'
+                    }}>
+                        Spremi status
+                    </button>
                 </div>
             </div>
         </div>

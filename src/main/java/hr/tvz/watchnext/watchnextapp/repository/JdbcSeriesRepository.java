@@ -92,4 +92,27 @@ public class JdbcSeriesRepository implements SeriesRepository {
     public void deleteByTitle(String title) {
         jdbc.update("DELETE FROM series WHERE LOWER(title) = LOWER(?)", title);
     }
+
+    @Override
+    public void listInsert(List<Series> seriesList) {
+        String sql = "INSERT INTO series (title, genre, total_seasons, status, imdb_rating, imdb_id) VALUES (?, ?, ?, ?, ?, ?)";
+        jdbc.batchUpdate(sql, seriesList, seriesList.size(), (ps, series) -> {
+            ps.setString(1, series.getTitle());
+            ps.setString(2, series.getGenre());
+            ps.setInt(3, series.getTotalSeasons());
+            ps.setString(4, series.getStatus().name());
+            ps.setDouble(5, series.getImdbRating());
+            ps.setString(6, series.getImdbId());
+        });
+    }
+
+    @Override
+    public void updateStatus(Long id, SeriesStatus newStatus) {
+        jdbc.update("UPDATE series SET status = ? WHERE id = ?", newStatus.name(), id);
+    }
+
+    @Override
+    public void deleteByStatus(SeriesStatus status) {
+        jdbc.update("DELETE FROM series WHERE status = ?", status.name());
+    }
 }

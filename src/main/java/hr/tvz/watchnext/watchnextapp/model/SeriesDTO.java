@@ -7,6 +7,7 @@ import lombok.Setter;
 @Setter
 public class SeriesDTO {
 
+    private Long id;
     private String title;
     private String genre;
     private Integer totalSeasons;
@@ -16,7 +17,8 @@ public class SeriesDTO {
 
     public SeriesDTO() {}
 
-    public SeriesDTO(String title, String genre, Integer totalSeasons, String status, Double imdbRating, String imdbId) {
+    public SeriesDTO(Long id, String title, String genre, Integer totalSeasons, String status, Double imdbRating, String imdbId) {
+        this.id = id;
         this.title = title;
         this.genre = genre;
         this.totalSeasons = totalSeasons;

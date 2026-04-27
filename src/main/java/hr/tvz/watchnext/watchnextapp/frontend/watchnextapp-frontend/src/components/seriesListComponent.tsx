@@ -1,17 +1,43 @@
 import { type Series } from '../types/series';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
     
 interface Props {
     seriesList: Series[];
     onDelete: (title: string) => void;
     onUpdate: (series: Series) => void;
+    onDeleteByStatus: (status: string) => void;
 }
 
-export const SeriesListComponent = ({ seriesList, onDelete, onUpdate }: Props) => {
+export const SeriesListComponent = ({ seriesList, onDelete, onUpdate, onDeleteByStatus }: Props) => {
     const navigate = useNavigate();
+    const [statusToDelete, setStatusToDelete] = useState('COMPLETED');
+
     return (
         <div style={{ width: '100%', padding: '20px' }}>
             <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Popis serija</h2>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                <strong style={{ color: 'white' }}>Obriši po statusu:</strong>
+                <select
+                    value={statusToDelete}
+                    onChange={e => setStatusToDelete(e.target.value)}
+                    style={{ padding: '6px 10px', borderRadius: '4px', border: '1px solid #ccc' }}
+                >
+                    <option value="WATCHING">WATCHING</option>
+                    <option value="PLANNED">PLANNED</option>
+                    <option value="COMPLETED">COMPLETED</option>
+                </select>
+                <button
+                    onClick={() => {
+                        if (window.confirm(`Sigurno želiš obrisati sve ${statusToDelete} serije?`)) {
+                            onDeleteByStatus(statusToDelete);
+                        }
+                    }}
+                    style={btnStyle('#ff0000')}
+                >
+                    Obriši sve
+                </button>
+            </div>
             <table style={{ 
                 width: '100%', 
                 borderCollapse: 'collapse', 
