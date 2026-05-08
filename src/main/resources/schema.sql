@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS review;
 DROP TABLE IF EXISTS series;
 
 CREATE TABLE series (
@@ -8,4 +9,14 @@ CREATE TABLE series (
                         status        VARCHAR(20),
                         imdb_rating   DOUBLE,
                         imdb_id       VARCHAR(20)
+);
+
+CREATE TABLE review (
+                        id           BIGINT AUTO_INCREMENT PRIMARY KEY,
+                        series_id    BIGINT,
+                        rating       INT,
+                        has_spoilers BOOLEAN,
+                        text         VARCHAR(1000),
+                        written_at   TIMESTAMP,
+                        FOREIGN KEY (series_id) REFERENCES series(id)
 );

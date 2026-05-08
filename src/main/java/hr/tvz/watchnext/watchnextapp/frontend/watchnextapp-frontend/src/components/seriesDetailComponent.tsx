@@ -1,6 +1,16 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { type Series } from '../types/series';
 import { useNavigate, useParams } from 'react-router-dom';
+
+interface Review {
+    id: number;
+    seriesId: number;
+    seriesTitle: string;
+    rating: number;
+    hasSpoilers: boolean;
+    text: string;
+    writtenAt: string;
+}
 
 interface SeriesDetailProps {
     seriesList: Series[];
@@ -12,7 +22,16 @@ export const SeriesDetailComponent = ({ seriesList, onStatusUpdate }: SeriesDeta
     const navigate = useNavigate();
     const selectedSeries = seriesList.find(s => s.title === id);
     const [newStatus, setNewStatus] = useState(selectedSeries?.status ?? 'WATCHING');
+    const [reviews, setReviews] = useState<Review[]>([]);
 
+    useEffect(() => {
+        if (selectedSeries?.id) {
+            fetch(`http://localhost:8080/api/reviews/series/${selectedSeries.id}`)
+                .then(res => res.json())
+                .then(data => setReviews(data))
+                .catch(err => console.error('Greška pri dohvatu recenzija:', err));
+        }
+    }, [selectedSeries?.id]);
 
     if (!selectedSeries) {
         return (
@@ -25,17 +44,16 @@ export const SeriesDetailComponent = ({ seriesList, onStatusUpdate }: SeriesDeta
         );
     }
 
-        const handleStatusUpdate = async () => {
-            const response = await fetch(
-                `http://localhost:8080/api/series/${selectedSeries.id}/status?status=${newStatus}`,
-                { method: 'PATCH' }
-            );
+    const handleStatusUpdate = async () => {
+        const response = await fetch(
+            `http://localhost:8080/api/series/${selectedSeries.id}/status?status=${newStatus}`,
+            { method: 'PATCH' }
+        );
         if (response.ok) {
-            alert('Status uspješno promijenjen!');
             onStatusUpdate();
+            alert('Status uspješno promijenjen!');
         }
-};
-
+    };
 
     return (
         <div style={{
@@ -66,12 +84,10 @@ export const SeriesDetailComponent = ({ seriesList, onStatusUpdate }: SeriesDeta
                     <strong>Žanr:</strong>
                     <span style={badgeStyle}>{selectedSeries.genre}</span>
                 </div>
-
                 <div style={detailRowStyle}>
                     <strong>Broj sezona:</strong>
                     <span>{selectedSeries.totalSeasons}</span>
                 </div>
-
                 <div style={detailRowStyle}>
                     <strong>Status:</strong>
                     <span style={{ 
@@ -82,15 +98,13 @@ export const SeriesDetailComponent = ({ seriesList, onStatusUpdate }: SeriesDeta
                         {selectedSeries.status}
                     </span>
                 </div>
-
                 <div style={detailRowStyle}>
                     <strong>IMDB Rating:</strong>
                     <span style={{ color: '#007bff', fontWeight: 'bold' }}>
-                        {selectedSeries.imdbRating ?? '-'} / 10
+                        ⭐ {selectedSeries.imdbRating ?? '-'} / 10
                     </span>
                 </div>
-
-                <div style={{ ...detailRowStyle, borderBottom: 'none' }}>
+                <div style={{ ...detailRowStyle }}>
                     <strong>IMDB ID:</strong>
                     {selectedSeries.imdbId ? (
                         <a 
@@ -105,6 +119,7 @@ export const SeriesDetailComponent = ({ seriesList, onStatusUpdate }: SeriesDeta
                         <span style={{ color: '#aaa' }}>—</span>
                     )}
                 </div>
+
                 <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <strong>Promijeni status:</strong>
                     <select
@@ -128,6 +143,45 @@ export const SeriesDetailComponent = ({ seriesList, onStatusUpdate }: SeriesDeta
                         Spremi status
                     </button>
                 </div>
+            </div>
+
+            {/* Recenzije */}
+            <div style={{ padding: '20px', borderTop: '1px solid #eee' }}>
+                <h3 style={{ color: '#333', marginBottom: '16px' }}>Recenzije</h3>
+                {reviews.length === 0 ? (
+                    <p style={{ color: '#aaa' }}>Nema recenzija za ovu seriju.</p>
+                ) : (
+                    reviews.map(review => (
+                        <div key={review.id} style={{
+                            padding: '12px 16px',
+                            marginBottom: '10px',
+                            borderRadius: '6px',
+                            backgroundColor: '#f8f9fa',
+                            border: '1px solid #eee'
+                        }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                                <span style={{ fontWeight: 'bold', color: '#007bff' }}>
+                                    {review.rating} ({review.rating}/5)
+                                </span>
+                                {review.hasSpoilers && (
+                                    <span style={{
+                                        backgroundColor: '#ff0000',
+                                        color: 'white',
+                                        padding: '2px 8px',
+                                        borderRadius: '12px',
+                                        fontSize: '0.75rem'
+                                    }}>
+                                        ⚠ Spoiler ⚠ 
+                                    </span>
+                                )}
+                            </div>
+                            <p style={{ color: '#333', margin: '0 0 6px 0' }}>{review.text}</p>
+                            <small style={{ color: '#aaa' }}>
+                                {new Date(review.writtenAt).toLocaleDateString('hr-HR')}
+                            </small>
+                        </div>
+                    ))
+                )}
             </div>
         </div>
     );
