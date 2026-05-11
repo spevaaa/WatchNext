@@ -15,7 +15,7 @@ public class MockSeriesRepository implements SeriesRepository {
 
     public MockSeriesRepository() {
 
-        Series s1 = new Series();
+        /*Series s1 = new Series();
         s1.setId(1L);
         s1.setTitle("Breaking Bad");
         s1.setGenre("Crime");
@@ -34,7 +34,7 @@ public class MockSeriesRepository implements SeriesRepository {
         s2.setImdbId("tt0903747");
 
         seriesList.add(s1);
-        seriesList.add(s2);
+        seriesList.add(s2);*/
     }
 
     @Override

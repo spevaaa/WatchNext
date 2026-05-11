@@ -82,7 +82,7 @@ export const SeriesDetailComponent = ({ seriesList, onStatusUpdate }: SeriesDeta
             <div style={{ padding: '20px' }}>
                 <div style={detailRowStyle}>
                     <strong>Žanr:</strong>
-                    <span style={badgeStyle}>{selectedSeries.genre}</span>
+                    <span style={badgeStyle}>{selectedSeries.genreName}</span>
                 </div>
                 <div style={detailRowStyle}>
                     <strong>Broj sezona:</strong>

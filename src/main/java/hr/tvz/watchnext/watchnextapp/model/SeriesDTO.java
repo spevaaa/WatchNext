@@ -9,7 +9,7 @@ public class SeriesDTO {
 
     private Long id;
     private String title;
-    private String genre;
+    private String genreName;
     private Integer totalSeasons;
     private String status;
     private Double imdbRating;
@@ -20,7 +20,7 @@ public class SeriesDTO {
     public SeriesDTO(Long id, String title, String genre, Integer totalSeasons, String status, Double imdbRating, String imdbId) {
         this.id = id;
         this.title = title;
-        this.genre = genre;
+        this.genreName = genre;
         this.totalSeasons = totalSeasons;
         this.status = status;
         this.imdbRating = imdbRating;

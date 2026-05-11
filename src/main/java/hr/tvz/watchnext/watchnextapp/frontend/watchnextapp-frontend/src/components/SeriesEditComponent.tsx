@@ -30,8 +30,8 @@ export const SeriesEditComponent = ({ series, onSave, onCancel }: EditProps) => 
 
             <label style={labelStyle}>Žanr
                 <input 
-                    value={formData.genre} 
-                    onChange={e => setFormData({...formData, genre: e.target.value})}
+                    value={formData.genreName} 
+                    onChange={e => setFormData({...formData, genreName: e.target.value})}
                     style={inputStyle} placeholder="Žanr"
                 />
             </label>

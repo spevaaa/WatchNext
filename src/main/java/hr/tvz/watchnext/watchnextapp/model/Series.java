@@ -22,8 +22,9 @@ public class Series {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "genre")
-    private String genre;
+    @ManyToOne
+    @JoinColumn(name = "genre_id")
+    private Genre genre;
 
     @Column(name = "total_seasons")
     private int totalSeasons;

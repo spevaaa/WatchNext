@@ -33,3 +33,7 @@ public class Review {
     @Column(name = "written_at")
     private LocalDateTime writtenAt;
 }
+/*
+* nova tablica, povezati many to one
+* napraviti neki jpa query koji koristi tu vezu
+*/

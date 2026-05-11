@@ -56,7 +56,7 @@ export const SeriesListComponent = ({ seriesList, onDelete, onUpdate, onDeleteBy
                     {seriesList.map((series) => (
                         <tr key={series.title} style={{ borderBottom: '1px solid #eee' }}>
                             <td style={tdStyle}>{series.title}</td>
-                            <td style={{ ...tdStyle, textAlign: 'center' }}>{series.genre}</td>
+                            <td style={{ ...tdStyle, textAlign: 'center' }}>{series.genreName}</td>
                             <td style={{ ...tdStyle, textAlign: 'center' }}>{series.totalSeasons}</td>
                             <td style={{ ...tdStyle, textAlign: 'center' }}>{series.status}</td>
                             <td style={{ ...tdStyle, textAlign: 'center', whiteSpace: 'nowrap' }}>

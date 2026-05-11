@@ -2,8 +2,10 @@ package hr.tvz.watchnext.watchnextapp.service;
 
 import hr.tvz.watchnext.watchnextapp.command.SeriesCommand;
 import hr.tvz.watchnext.watchnextapp.enumeration.SeriesStatus;
+import hr.tvz.watchnext.watchnextapp.model.Genre;
 import hr.tvz.watchnext.watchnextapp.model.Series;
 import hr.tvz.watchnext.watchnextapp.model.SeriesDTO;
+import hr.tvz.watchnext.watchnextapp.repository.GenreRepository;
 import hr.tvz.watchnext.watchnextapp.repository.SeriesRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +16,12 @@ import java.util.Optional;
 public class SeriesServiceImpl implements SeriesService {
 
     private final SeriesRepository seriesRepository;
+    private final GenreRepository genreRepository;
 
-    public SeriesServiceImpl(SeriesRepository seriesRepository) {
+
+    public SeriesServiceImpl(SeriesRepository seriesRepository, GenreRepository genreRepository) {
         this.seriesRepository = seriesRepository;
+        this.genreRepository = genreRepository;
     }
 
     @Override
@@ -61,9 +66,19 @@ public class SeriesServiceImpl implements SeriesService {
             return Optional.empty();
         }
 
+        Genre genre = null;
+        if (command.getGenre() != null) {
+            genre = genreRepository.findByName(command.getGenre())
+                    .orElseGet(() -> {
+                        Genre newGenre = new Genre();
+                        newGenre.setName(command.getGenre());
+                        return genreRepository.save(newGenre);
+                    });
+        }
+
         Series newSeries = Series.builder()
                 .title(command.getTitle())
-                .genre(command.getGenre())
+                .genre(genre)
                 .totalSeasons(command.getTotalSeasons())
                 .status(command.getStatus())
                 .imdbRating(command.getImdbRating())
@@ -71,7 +86,6 @@ public class SeriesServiceImpl implements SeriesService {
                 .build();
 
         Series saved = seriesRepository.save(newSeries);
-
         return Optional.of(convertToDTO(saved));
     }
 
@@ -108,7 +122,7 @@ public class SeriesServiceImpl implements SeriesService {
         return new SeriesDTO(
                 series.getId(),
                 series.getTitle(),
-                series.getGenre(),
+                series.getGenre() != null ? series.getGenre().getName() : null,
                 series.getTotalSeasons(),
                 series.getStatus().toString(),
                 series.getImdbRating(),
@@ -118,8 +132,15 @@ public class SeriesServiceImpl implements SeriesService {
     private Series convertToEntity(SeriesDTO dto) {
         Series series = new Series();
         series.setTitle(dto.getTitle());
-        series.setGenre(dto.getGenre());
-        series.setTotalSeasons(dto.getTotalSeasons());
+        if (dto.getGenreName() != null) {
+            Genre genre = genreRepository.findByName(dto.getGenreName())
+                    .orElseGet(() -> {
+                        Genre newGenre = new Genre();
+                        newGenre.setName(dto.getGenreName());
+                        return genreRepository.save(newGenre);
+                    });
+            series.setGenre(genre);
+        }        series.setTotalSeasons(dto.getTotalSeasons());
         series.setImdbRating(dto.getImdbRating());
         if (dto.getStatus() != null) {
             series.setStatus(SeriesStatus.valueOf(dto.getStatus().toUpperCase()));
@@ -136,18 +157,24 @@ public class SeriesServiceImpl implements SeriesService {
         }
 
         Series seriesToUpdate = existingSeriesList.get(0);
-        Long currentId = seriesToUpdate.getId();
 
         seriesToUpdate.setTitle(updatedSeries.getTitle());
-        seriesToUpdate.setGenre(updatedSeries.getGenre());
         seriesToUpdate.setTotalSeasons(updatedSeries.getTotalSeasons());
         seriesToUpdate.setStatus(updatedSeries.getStatus());
         seriesToUpdate.setImdbRating(updatedSeries.getImdbRating());
         seriesToUpdate.setImdbId(updatedSeries.getImdbId());
 
-        seriesToUpdate.setId(currentId);
-        Series saved = seriesRepository.save(seriesToUpdate);
+        if (updatedSeries.getGenre() != null && updatedSeries.getGenre().getName() != null) {
+            Genre genre = genreRepository.findByName(updatedSeries.getGenre().getName())
+                    .orElseGet(() -> {
+                        Genre newGenre = new Genre();
+                        newGenre.setName(updatedSeries.getGenre().getName());
+                        return genreRepository.save(newGenre);
+                    });
+            seriesToUpdate.setGenre(genre);
+        }
 
+        Series saved = seriesRepository.save(seriesToUpdate);
         return Optional.of(convertToDTO(saved));
     }
 

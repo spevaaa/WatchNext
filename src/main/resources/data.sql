@@ -1,9 +1,14 @@
-INSERT INTO series (title, genre, total_seasons, status, imdb_rating, imdb_id)
-VALUES ('Breaking Bad', 'Crime Drama', 5, 'COMPLETED', 9.5, 'tt0903747'),
-       ('The Wire', 'Crime Drama', 5, 'COMPLETED', 9.3, 'tt0306414'),
-       ('Dark', 'Sci-Fi', 3, 'WATCHING', 8.8, 'tt5753856'),
-       ('Severance', 'Sci-Fi', 2, 'PLANNED', 8.7, 'tt11280740'),
-       ('Chernobyl', 'Historical', 1, 'COMPLETED', 9.4, 'tt7366338');
+INSERT INTO genre (name, description)
+VALUES ('Crime Drama', 'Kriminalistička drama'),
+       ('Sci-Fi', 'Znanstvena fantastika'),
+       ('Historical', 'Povijesni sadržaj');
+
+INSERT INTO series (title, genre_id, total_seasons, status, imdb_rating, imdb_id)
+VALUES ('Breaking Bad', 1, 5, 'COMPLETED', 9.5, 'tt0903747'),
+       ('The Wire', 1, 5, 'COMPLETED', 9.3, 'tt0306414'),
+       ('Dark', 2, 3, 'WATCHING', 8.8, 'tt5753856'),
+       ('Severance', 2, 2, 'PLANNED', 8.7, 'tt11280740'),
+       ('Chernobyl', 3, 1, 'COMPLETED', 9.4, 'tt7366338');
 
 INSERT INTO review (series_id, rating, has_spoilers, text, written_at)
 VALUES (1, 5, false, 'Apsolutno remek-djelo, jedna od najboljih serija ikad!', NOW()),

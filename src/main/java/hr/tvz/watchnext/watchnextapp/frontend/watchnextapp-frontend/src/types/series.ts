@@ -1,7 +1,7 @@
 export interface Series {
     id: number;
     title: string;
-    genre: string;
+    genreName: string;
     totalSeasons: number;
     status: string;
     imdbRating: number;
