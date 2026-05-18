@@ -1,3 +1,18 @@
+INSERT INTO authority (name)
+VALUES ('ROLE_ADMIN'),
+       ('ROLE_USER'),
+       ('ROLE_GUEST');
+
+INSERT INTO "user" (username, password, first_name, last_name)
+VALUES ('admin', '$2a$10$nK7oenuC6wFUG88vKBCJKuYXDaX9w/CFb5kWaa48U3/rODmIM6If2', 'Admin', 'User'),
+       ('user', '$2a$10$MP.6v2/6XewA.kadl9Kacubo4SopBP9jQm0FYay0SJ0E7maWuVQaG', 'Regular', 'User'),
+       ('guest', '$2a$10$Yo4zKYeqj9HSEMmMSDKu.u88QIZBPT6lrbbouRI4uz5/5sUFZMUQC', 'Guest', 'User');
+
+INSERT INTO user_authority (user_id, authority_id)
+VALUES (1, 1),
+       (2, 2),
+       (3, 3);
+
 INSERT INTO genre (name, description)
 VALUES ('Crime Drama', 'Kriminalistička drama'),
        ('Sci-Fi', 'Znanstvena fantastika'),

@@ -6,13 +6,27 @@ import { SeriesAddComponent } from './components/SeriesAddComponent';
 import { useSeries } from './hooks/useSeries';
 import { SeriesEditComponent } from './components/SeriesEditComponent';
 import { type Series } from './types/series';
+import { LoginComponent } from './components/LoginComponent';
 
 function App() {
     const { data, loading, error, refreshData, removeLocally } = useSeries();
     const [editingSeries, setEditingSeries] = useState<Series | null>(null);
+    const [token, setToken] = useState<string | null>(null);
+    const [username, setUsername] = useState<string | null>(null);
+    const [role, setRole] = useState<string | null>(null);
 
     if (loading) return <div style={{ padding: '20px' }}>Učitavam...</div>;
     if (error) return <div style={{ padding: '20px', color: 'red' }}>Greška: {error}</div>;
+
+    const handleLogin = (token: string, username: string, role: string) => {
+        setToken(token);
+        setUsername(username);
+        setRole(role);
+    }
+
+    if(!token) {
+        return <LoginComponent onLogin={handleLogin} />
+    }
 
     const handleDelete = async (title: string) => {
         if (!window.confirm(`Sigurno želite obrisati seriju "${title}"?`)) return;
@@ -71,6 +85,26 @@ function App() {
             <nav style={{ padding: '20px', backgroundColor: '#003363', marginBottom: '20px', borderRadius: '8px', width: '100%' }}>
                 <Link to="/" style={{ color: 'white', marginRight: '20px', textDecoration: 'none' }}>Početna</Link>
                 <Link to="/list" style={{ color: 'white', textDecoration: 'none' }}>Lista serija</Link>
+                <br /><br />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', width: '70%', margin: '0 auto', justifyContent: 'center'}}>
+                    <span style={{ color: 'white', fontSize: '0.9rem' }}>
+                        {username} — <span style={{ color: '#ffc107' }}>{role}</span>
+                    </span>
+                    <button 
+                        onClick={() => { setToken(null); setUsername(null); setRole(null); }}
+                        style={{
+                            padding: '6px 14px',
+                            backgroundColor: '#ff0000',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            cursor: 'pointer',
+                            fontSize: '0.85rem'
+                        }}
+                    >
+                        Odjava
+                    </button>
+    </div>
             </nav>
 
             <Routes>
