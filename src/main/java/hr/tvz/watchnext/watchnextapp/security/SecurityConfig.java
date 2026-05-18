@@ -18,13 +18,10 @@ public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
 
-<<<<<<< HEAD
     private final String ADMIN = "ADMIN";
     private final String USER = "USER";
     private final String GUEST = "GUEST";
 
-=======
->>>>>>> f4ebf5c299e0c72d5f510cc537e1f538375dc88b
     public SecurityConfig(JwtFilter jwtFilter) {
         this.jwtFilter = jwtFilter;
     }
@@ -47,7 +44,6 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/h2-console/**", "/api/auth/**").permitAll()
-<<<<<<< HEAD
                         .requestMatchers(HttpMethod.GET, "/api/series/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/reviews/**").hasAnyRole(ADMIN, USER, GUEST)
                         .requestMatchers(HttpMethod.GET, "/api/genre/**").hasAnyRole(ADMIN, USER, GUEST)
@@ -55,11 +51,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/**").hasAnyRole(ADMIN, USER)
                         .requestMatchers(HttpMethod.PUT, "/api/**").hasAnyRole(ADMIN, USER)
                         .requestMatchers(HttpMethod.PATCH, "/api/**").hasAnyRole(ADMIN, USER)
-=======
                         .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/**").authenticated()
->>>>>>> f4ebf5c299e0c72d5f510cc537e1f538375dc88b
                         .anyRequest().authenticated()
                 )
                 .headers(headers -> headers
