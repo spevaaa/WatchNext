@@ -1,9 +1,14 @@
+<<<<<<< HEAD
 package hr.tvz.watchnext.watchnextapp.controller;
 
 import hr.tvz.watchnext.watchnextapp.security.JwtTokenProvider;
 import hr.tvz.watchnext.watchnextapp.security.LoginRequest;
 import hr.tvz.watchnext.watchnextapp.security.LoginResponse;
 import org.springframework.security.core.GrantedAuthority;
+=======
+package hr.tvz.watchnext.watchnextapp.security;
+
+>>>>>>> f4ebf5c299e0c72d5f510cc537e1f538375dc88b
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,10 +34,14 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(request.username(), request.password())
         );
         String token = jwtTokenProvider.generateToken(authentication);
+<<<<<<< HEAD
         String role = authentication.getAuthorities().stream()
                 .findFirst()
                 .map(GrantedAuthority::getAuthority)
                 .orElse("");
         return ResponseEntity.ok(new LoginResponse(token, request.username(), role));
+=======
+        return ResponseEntity.ok(new LoginResponse(token));
+>>>>>>> f4ebf5c299e0c72d5f510cc537e1f538375dc88b
     }
 }
