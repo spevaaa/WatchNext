@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { type Series } from '../types/series';
+import API from '../api/axiosConfig';
 
 export const useSeries = () => {
     const [data, setData] = useState<Series[]>([]);
@@ -13,14 +14,10 @@ export const useSeries = () => {
     const fetchData = useCallback(async () => {
         try {
             setLoading(true);
-            const response = await fetch('http://localhost:8080/api/series');
             
-            if (!response.ok) {
-                throw new Error('Greška prilikom dohvaćanja podataka.');
-            }
-
-            const result = await response.json();
-            setData(result);
+            const response = await API.get<Series[]>('/series');
+            
+            setData(response.data);
             setError(null);
         } catch (err: any) {
             setError(err.message || 'Došlo je do pogreške.');

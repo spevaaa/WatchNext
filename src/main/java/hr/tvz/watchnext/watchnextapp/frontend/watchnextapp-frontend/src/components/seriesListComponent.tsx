@@ -1,7 +1,8 @@
 import { type Series } from '../types/series';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-    
+import { useAuth } from '../context/AuthContext';
+
 interface Props {
     seriesList: Series[];
     onDelete: (title: string) => void;
@@ -11,33 +12,40 @@ interface Props {
 
 export const SeriesListComponent = ({ seriesList, onDelete, onUpdate, onDeleteByStatus }: Props) => {
     const navigate = useNavigate();
+    const { role } = useAuth();
     const [statusToDelete, setStatusToDelete] = useState('COMPLETED');
+
+    const isAdmin = role === 'ROLE_ADMIN';
 
     return (
         <div style={{ width: '100%', padding: '20px' }}>
-            <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Popis serija</h2>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                <strong style={{ color: 'white' }}>Obriši po statusu:</strong>
-                <select
-                    value={statusToDelete}
-                    onChange={e => setStatusToDelete(e.target.value)}
-                    style={{ padding: '6px 10px', borderRadius: '4px', border: '1px solid #ccc' }}
-                >
-                    <option value="WATCHING">WATCHING</option>
-                    <option value="PLANNED">PLANNED</option>
-                    <option value="COMPLETED">COMPLETED</option>
-                </select>
-                <button
-                    onClick={() => {
-                        if (window.confirm(`Sigurno želiš obrisati sve ${statusToDelete} serije?`)) {
-                            onDeleteByStatus(statusToDelete);
-                        }
-                    }}
-                    style={btnStyle('#ff0000')}
-                >
-                    Obriši sve
-                </button>
-            </div>
+            <h2 style={{ textAlign: 'center', marginBottom: '20px', color: 'white' }}>Popis serija</h2>
+            
+            {isAdmin && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                    <strong style={{ color: 'white' }}>Obriši po statusu:</strong>
+                    <select
+                        value={statusToDelete}
+                        onChange={e => setStatusToDelete(e.target.value)}
+                        style={{ padding: '6px 10px', borderRadius: '4px', border: '1px solid #ccc' }}
+                    >
+                        <option value="WATCHING">WATCHING</option>
+                        <option value="PLANNED">PLANNED</option>
+                        <option value="COMPLETED">COMPLETED</option>
+                    </select>
+                    <button
+                        onClick={() => {
+                            if (window.confirm(`Sigurno želiš obrisati sve ${statusToDelete} serije?`)) {
+                                onDeleteByStatus(statusToDelete);
+                            }
+                        }}
+                        style={btnStyle('#ff0000')}
+                    >
+                        Obriši sve
+                    </button>
+                </div>
+            )}
+
             <table style={{ 
                 width: '100%', 
                 borderCollapse: 'collapse', 
@@ -60,9 +68,20 @@ export const SeriesListComponent = ({ seriesList, onDelete, onUpdate, onDeleteBy
                             <td style={{ ...tdStyle, textAlign: 'center' }}>{series.totalSeasons}</td>
                             <td style={{ ...tdStyle, textAlign: 'center' }}>{series.status}</td>
                             <td style={{ ...tdStyle, textAlign: 'center', whiteSpace: 'nowrap' }}>
-                                <button onClick={() => navigate(`/details/${series.title}`)} style={btnStyle('#007bff')}>Detalji</button>
-                                <button onClick={() => onUpdate(series)} style={btnStyle('#018921')}>Uredi</button>
-                                <button onClick={() => onDelete(series.title)} style={btnStyle('#ff0000')}>Obriši</button>
+                                <button onClick={() => navigate(`/details/${series.title}`)} style={btnStyle('#007bff')}>
+                                    Detalji
+                                </button>
+                                
+                                {isAdmin && (
+                                    <>
+                                        <button onClick={() => onUpdate(series)} style={btnStyle('#018921')}>
+                                            Uredi
+                                        </button>
+                                        <button onClick={() => onDelete(series.title)} style={btnStyle('#ff0000')}>
+                                            Obriši
+                                        </button>
+                                    </>
+                                )}
                             </td>
                         </tr>
                     ))}
