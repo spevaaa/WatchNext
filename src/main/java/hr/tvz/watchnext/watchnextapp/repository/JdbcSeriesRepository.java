@@ -4,6 +4,7 @@ import hr.tvz.watchnext.watchnextapp.enumeration.SeriesStatus;
 import hr.tvz.watchnext.watchnextapp.model.Genre;
 import hr.tvz.watchnext.watchnextapp.model.Series;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -132,5 +133,21 @@ public class JdbcSeriesRepository implements SeriesRepository {
     @Override
     public void deleteByStatus(SeriesStatus status) {
         jdbc.update("DELETE FROM series WHERE status = ?", status.name());
+    }
+
+    @Override
+    public List<Series> findByOrderByIdDesc(Pageable pageable) {
+        String sql = "SELECT * FROM series ORDER BY id DESC LIMIT ? OFFSET ?";
+
+        int limit = pageable.getPageSize();
+        long offset = pageable.getOffset();
+
+        return jdbc.query(sql, (rs, rowNum) -> {
+            Series series = new Series();
+            series.setId(rs.getLong("id"));
+            series.setTitle(rs.getString("title"));
+
+            return series;
+        }, limit, offset);
     }
 }

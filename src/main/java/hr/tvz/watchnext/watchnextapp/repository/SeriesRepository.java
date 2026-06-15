@@ -2,6 +2,7 @@ package hr.tvz.watchnext.watchnextapp.repository;
 
 import hr.tvz.watchnext.watchnextapp.enumeration.SeriesStatus;
 import hr.tvz.watchnext.watchnextapp.model.Series;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,4 +18,6 @@ public interface SeriesRepository {
     void listInsert(List<Series> seriesList);
     void updateStatus(Long id, SeriesStatus newStatus);
     void deleteByStatus(SeriesStatus status);
+
+    List<Series> findByOrderByIdDesc(Pageable pageable);
 }

@@ -2,6 +2,7 @@ package hr.tvz.watchnext.watchnextapp.repository;
 
 import hr.tvz.watchnext.watchnextapp.enumeration.SeriesStatus;
 import hr.tvz.watchnext.watchnextapp.model.Series;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -95,6 +96,11 @@ public class MockSeriesRepository implements SeriesRepository {
     @Override
     public void deleteByStatus(SeriesStatus status) {
 
+    }
+
+    @Override
+    public List<Series> findByOrderByIdDesc(Pageable pageable) {
+        return List.of();
     }
 
 
